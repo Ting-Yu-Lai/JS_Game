@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basketball Fire</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.7/css/bootstrap.min.css"
+        integrity="sha512-fw7f+TcMjTb7bpbLJZlP8g2Y4XcCyFZW8uy8HsRZsH/SwbMw0plKHFHr99DN3l04VsYNwvzicUX/6qurvIxbxw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+            height: 100vh;
+            padding: 2rem 0;
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        .game-title {
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: #dc3545;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .header-section {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .time,
+        .score,
+        .high-score {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #343a40;
+        }
+
+        .hoop {
+            width: 160px;
+            height: 110px;
+            background-color: #6c757d;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            border: 4px solid #495057;
+            margin: 0 auto;
+            font-weight: bold;
+        }
+
+        .hoop img {
+            width: 300px;
+            height: 300px;
+        }
+
+        #basketball {
+            /* width: 90px; */
+            /* height: 90px; */
+            /* background-color: #fd7e14; */
+            /* color: white; */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* border-radius: 50%; */
+            /* border: 3px solid #343a40; */
+            margin: 120px auto 0;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+
+        .ball img {
+            width: 90px;
+            height: 90px;
+        }
+
+        #basketball:hover {
+            transform: scale(1.1);
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 2.5rem;
+        }
+
+        .btn {
+            margin: 0 1rem;
+            padding: 0.8rem 2.5rem;
+            font-size: 1.2rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background-color: #b02a37;
+            transform: translateY(-2px);
+        }
+
+        .main {
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hide-btn {
+            display: none;
+        }
+
+        .show-btn {
+            display: inline;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Game Title -->
+    <div class="container">
+        <div class="game-title">籃球Fire</div>
+    </div>
+
+    <!-- Header: Score, Time, High Score -->
+    <div class="container header-section">
+        <div class="row">
+            <div class="col-12 col-md-4">
+                <div class="score">分數: <span id="scoreval">0</span></div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="time">時間: 00:00</div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="high-score text-md-end">歷史最高: 0</div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Main Game Area -->
+    <div class="main container mt-5">
+        <div class="row">
+            <div class="col-12 text-center">
+                <!-- Hoop -->
+                <div class="hoop">
+                    <img src="./image/Basketball_hoop.png" alt="籃框">
+                    <!-- 籃框 -->
+                </div>
+            </div>
+            <div class="col-12 text-center">
+                <!-- Ball -->
+                <div id="basketball" class="ball">
+                    <img src="./image/baseketball.png" alt="籃球">
+                    <!-- 籃球 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="container btn-container">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <button id="startBtn" type="button" class="btn btn-primary">開始</button>
+                <button id="shotBtn" type="button" class="btn btn-success">投籃</button>
+                <button id="stopBtn" type="button" class="btn btn-danger">暫停</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"
+        integrity="sha512-7Pi/otdlbbCR+LnW+FGlF6t6yL9m6hJKnzEVGVFdr6ceC3qA9FLGwQKTsC1spzszqW4e2jeB9S7W2g9GhfH3kXg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        const startBtn = document.getElementById("startBtn");
+        const shotBtn = document.getElementById("shotBtn");
+        const stopBtn = document.getElementById("stopBtn");
+
+        console.log('startBtn', startBtn);
+        console.log('shotBtn', shotBtn);
+        console.log('stopBtn', stopBtn);
+
+        // shotBtn hideBtn
+        shotBtn.setAttribute('class', 'btn btn-success class-btn me-5 hide-btn');
+
+
+
+        // action
+        startBtn.addEventListener('click', function () {
+            console.log('startBtn click ok');
+            this.setAttribute('class', 'btn btn-primary class-btn me-5 hide-btn ');
+            shotBtn.setAttribute('class', 'btn btn-success class-btn me-5 show-btn');
+
+        });
+        shotBtn.addEventListener('click', function () {
+            console.log('shotBtn click ok');
+
+        });
+        stopBtn.addEventListener('click', function () {
+            console.log('stopBtn click ok');
+
+        });
+        // Placeholder for future game logic
+        $(document).ready(function () {
+            // game logic here
+
+        });
+    </script>
+</body>
+
+</html>
