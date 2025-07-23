@@ -146,10 +146,10 @@
     <div class="container header-section">
         <div class="row">
             <div class="col-12 col-md-4">
-                <div class="score">分數: <span id="scoreval">0</span></div>
+                <div class="score">分數: <span id="scoreVal">0</span></div>
             </div>
             <div class="col-12 col-md-4">
-                <div class="time">時間: 00:00</div>
+                <div class="time">時間: <span id="time" class="text-success">00</span></div>
             </div>
             <div class="col-12 col-md-4">
                 <div class="high-score text-md-end">歷史最高: 0</div>
@@ -202,14 +202,17 @@
         const startBtn = document.getElementById("startBtn");
         const shotBtn = document.getElementById("shotBtn");
         const stopBtn = document.getElementById("stopBtn");
+        const scoreVal = document.getElementById("scoreVal");
+        const time = document.getElementById("time");
 
         console.log('startBtn', startBtn);
         console.log('shotBtn', shotBtn);
         console.log('stopBtn', stopBtn);
 
+        let score = 0;
+        let starTime = 5;
         // shotBtn hideBtn
         shotBtn.setAttribute('class', 'btn btn-success class-btn me-5 hide-btn');
-
 
 
         // action
@@ -217,15 +220,33 @@
             console.log('startBtn click ok');
             this.setAttribute('class', 'btn btn-primary class-btn me-5 hide-btn ');
             shotBtn.setAttribute('class', 'btn btn-success class-btn me-5 show-btn');
+            time.innerHTML = starTime;
+            const timer = setInterval(function () {
+
+                starTime--;
+                time.innerHTML = starTime;
+                if (starTime <= 0) {
+                    clearInterval(timer);
+                    setTimeout(function () {
+                        time.innerHTML = 0;
+                        alert("時間到!" + '您的分數是:' + score);
+                    }, 0)
+                }
+
+                if (starTime <= 30) {
+                    time.setAttribute('class', 'text-danger');
+                }
+            }, 1000);
 
         });
         shotBtn.addEventListener('click', function () {
             console.log('shotBtn click ok');
-
+            score += 2;
+            scoreVal.innerHTML = score;
         });
         stopBtn.addEventListener('click', function () {
             console.log('stopBtn click ok');
-
+            clearInterval(timer);
         });
         // Placeholder for future game logic
         $(document).ready(function () {
