@@ -210,12 +210,27 @@
         console.log('stopBtn', stopBtn);
 
         let score = 0;
-        let starTime = 5;
+        let starTime = 10;
+        let bonustime = 5;
+        // 要設定好全域變數
+        let timer = null;
         // shotBtn hideBtn
         shotBtn.setAttribute('class', 'btn btn-success class-btn me-5 hide-btn');
 
 
         // action
+        function resetGame() {
+            console.log('reset');
+            clearInterval(timer);
+            score = 0;
+            starTime = 10;
+            scoreVal.innerHTML = score;
+            time.innerHTML = starTime;
+            time.setAttribute('class', 'text-success');
+            startBtn.setAttribute('class', 'btn btn-primary class-btn me-5 show-btn ');
+            shotBtn.setAttribute('class', 'btn btn-success class-btn me-5 hide-btn');
+        }
+
         startBtn.addEventListener('click', function () {
             console.log('startBtn click ok');
             this.setAttribute('class', 'btn btn-primary class-btn me-5 hide-btn ');
@@ -226,10 +241,11 @@
                 starTime--;
                 time.innerHTML = starTime;
                 if (starTime <= 0) {
-                    clearInterval(timer);
                     setTimeout(function () {
+                        clearInterval(timer);
                         time.innerHTML = 0;
                         alert("時間到!" + '您的分數是:' + score);
+                        resetGame();
                     }, 0)
                 }
 
@@ -241,13 +257,21 @@
         });
         shotBtn.addEventListener('click', function () {
             console.log('shotBtn click ok');
-            score += 2;
+            if (starTime < 1) {
+                return false;
+            }
+            if (starTime > bonustime) {
+                score += 2;
+            } else {
+                score += 3;
+            }
             scoreVal.innerHTML = score;
         });
         stopBtn.addEventListener('click', function () {
             console.log('stopBtn click ok');
             clearInterval(timer);
         });
+
         // Placeholder for future game logic
         $(document).ready(function () {
             // game logic here
