@@ -214,7 +214,7 @@
         // 得分
         let score = 0;
         // 開始時間
-        let starTime = 60;
+        let starTime = 30;
         // 分數雙倍時間
         let bonustime = 5;
         // 要設定好全域變數
@@ -236,7 +236,7 @@
             console.log('reset');
             clearInterval(timer);
             score = 0;
-            starTime = 60;
+            starTime = 30;
             scoreVal.innerHTML = score;
             timeSpan.innerHTML = starTime;
             timeSpan.setAttribute('class', 'text-success');
@@ -269,7 +269,7 @@
                     }, 0);
                 }
 
-                if (starTime <= 5) {
+                if (starTime <= 10) {
                     timeSpan.setAttribute('class', 'text-danger');
                 } else {
                     timeSpan.setAttribute('class', 'text-success');
