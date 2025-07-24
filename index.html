@@ -152,7 +152,7 @@
                 <div class="time">時間: <span id="time" class="text-success">00</span></div>
             </div>
             <div class="col-12 col-md-4">
-                <div class="high-score text-md-end">歷史最高: 0</div>
+                <div class="high-score text-md-end">歷史最高: <span id="maxScoreSpan">0</span></div>
             </div>
         </div>
     </div>
@@ -204,16 +204,29 @@
         const stopBtn = document.getElementById("stopBtn");
         const scoreVal = document.getElementById("scoreVal");
         const time = document.getElementById("time");
+        const maxScoreSpan = document.getElementById("maxScoreSpan");
 
         console.log('startBtn', startBtn);
         console.log('shotBtn', shotBtn);
         console.log('stopBtn', stopBtn);
-
+        // 得分
         let score = 0;
+        // 開始時間
         let starTime = 10;
+        // 分數雙倍時間
         let bonustime = 5;
         // 要設定好全域變數
         let timer = null;
+        let maxScore = 0;
+        // localStorage可以把數字藏進去放著，通常拿出來會是String
+        // 在這邊先試看看localStorage
+        // localStorage.setItem('maxScore', maxScore);
+        // let getMaxScore = Number(localStorage.getItem('maxScore'));
+        // if (getMaxScore) {
+        //     maxScore = getMaxScore;
+        // }
+        // set MaxScore
+        // maxScoreSpan.innerHTML = maxScore;
         // shotBtn hideBtn
         shotBtn.setAttribute('class', 'btn btn-success class-btn me-5 hide-btn');
 
@@ -241,6 +254,15 @@
                 starTime--;
                 time.innerHTML = starTime;
                 if (starTime <= 0) {
+                    // 運用localStorage把大於歷史分數的score放入maxScore
+                    if (maxScore < score) {
+                        localStorage.setItem('maxScore', score);
+                        let getMaxScore = Number(localStorage.getItem('maxScore'));
+                        if (getMaxScore) {
+                            maxScore = getMaxScore;
+                        }
+                        maxScoreSpan.innerHTML = maxScore
+                    }
                     setTimeout(function () {
                         clearInterval(timer);
                         time.innerHTML = 0;
