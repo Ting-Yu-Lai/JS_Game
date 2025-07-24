@@ -229,6 +229,11 @@
         // maxScoreSpan.innerHTML = maxScore;
         // shotBtn hideBtn
         shotBtn.setAttribute('class', 'btn btn-success class-btn me-5 hide-btn');
+        let getMaxScore = localStorage.getItem('maxScore');
+        if(getMaxScore) {
+            maxScore = Number(getMaxScore);
+        }
+        maxScoreSpan.innerHTML = maxScore
 
 
         // action
@@ -249,18 +254,15 @@
             this.setAttribute('class', 'btn btn-primary class-btn me-5 hide-btn ');
             shotBtn.setAttribute('class', 'btn btn-success class-btn me-5 show-btn');
             time.innerHTML = starTime;
-            const timer = setInterval(function () {
+            timer = setInterval(function () {
 
                 starTime--;
                 time.innerHTML = starTime;
                 if (starTime <= 0) {
                     // 運用localStorage把大於歷史分數的score放入maxScore
                     if (maxScore < score) {
-                        localStorage.setItem('maxScore', score);
-                        let getMaxScore = Number(localStorage.getItem('maxScore'));
-                        if (getMaxScore) {
-                            maxScore = getMaxScore;
-                        }
+                        maxScore = score;
+                        localStorage.setItem('maxScore', maxScore);
                         maxScoreSpan.innerHTML = maxScore
                     }
                     setTimeout(function () {
