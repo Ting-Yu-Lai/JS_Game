@@ -15,7 +15,7 @@
             padding: 2rem 0;
             display: flex;
             flex-direction: column;
-
+            position: relative;
         }
 
         .game-title {
@@ -54,6 +54,7 @@
             border-radius: 12px;
             border: 4px solid #495057;
             margin: 0 auto;
+            position: relative;
             font-weight: bold;
         }
 
@@ -63,18 +64,13 @@
         }
 
         #basketball {
-            /* width: 90px; */
-            /* height: 90px; */
-            /* background-color: #fd7e14; */
-            /* color: white; */
+            width: 90px;
+            height: 90px;
             display: flex;
             align-items: center;
             justify-content: center;
-            /* border-radius: 50%; */
-            /* border: 3px solid #343a40; */
             margin: 120px auto 0;
             font-weight: bold;
-            transition: transform 0.3s ease;
         }
 
         .ball img {
@@ -82,8 +78,24 @@
             height: 90px;
         }
 
-        #basketball:hover {
-            transform: scale(1.1);
+        .flying-ball {
+            width: 90px;
+            height: 90px;
+            position: absolute;
+            transition: transform 0.3s ease;
+        }
+
+        .flying-ball img {
+            width: 90px;
+            height: 90px;
+        }
+
+        .main {
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
         }
 
         .btn-container {
@@ -119,13 +131,6 @@
             transform: translateY(-2px);
         }
 
-        .main {
-            height: 60vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
         .hide-btn {
             display: none;
         }
@@ -149,15 +154,13 @@
                 <div class="score">分數: <span id="scoreVal">0</span></div>
             </div>
             <div class="col-12 col-md-4">
-                <div class="time">時間: <span id="time" class="text-success">00</span></div>
+                <div class="time">時間: <span id="timeSpan" class="text-success">00</span></div>
             </div>
             <div class="col-12 col-md-4">
                 <div class="high-score text-md-end">歷史最高: <span id="maxScoreSpan">0</span></div>
             </div>
         </div>
     </div>
-
-
 
     <!-- Main Game Area -->
     <div class="main container mt-5">
@@ -166,14 +169,12 @@
                 <!-- Hoop -->
                 <div class="hoop">
                     <img src="./image/Basketball_hoop.png" alt="籃框">
-                    <!-- 籃框 -->
                 </div>
             </div>
             <div class="col-12 text-center">
                 <!-- Ball -->
                 <div id="basketball" class="ball">
                     <img src="./image/baseketball.png" alt="籃球">
-                    <!-- 籃球 -->
                 </div>
             </div>
         </div>
@@ -203,8 +204,9 @@
         const shotBtn = document.getElementById("shotBtn");
         const stopBtn = document.getElementById("stopBtn");
         const scoreVal = document.getElementById("scoreVal");
-        const time = document.getElementById("time");
+        const timeSpan = document.getElementById("timeSpan");
         const maxScoreSpan = document.getElementById("maxScoreSpan");
+        const main = document.querySelector(".main");
 
         console.log('startBtn', startBtn);
         console.log('shotBtn', shotBtn);
@@ -212,94 +214,134 @@
         // 得分
         let score = 0;
         // 開始時間
-        let starTime = 10;
+        let starTime = 60;
         // 分數雙倍時間
         let bonustime = 5;
         // 要設定好全域變數
         let timer = null;
         let maxScore = 0;
-        // localStorage可以把數字藏進去放著，通常拿出來會是String
-        // 在這邊先試看看localStorage
-        // localStorage.setItem('maxScore', maxScore);
-        // let getMaxScore = Number(localStorage.getItem('maxScore'));
-        // if (getMaxScore) {
-        //     maxScore = getMaxScore;
-        // }
-        // set MaxScore
-        // maxScoreSpan.innerHTML = maxScore;
-        // shotBtn hideBtn
-        shotBtn.setAttribute('class', 'btn btn-success class-btn me-5 hide-btn');
+
+        // 頁面加載時從 localStorage 初始化 maxScore
         let getMaxScore = localStorage.getItem('maxScore');
-        if(getMaxScore) {
+        if (getMaxScore) {
             maxScore = Number(getMaxScore);
         }
-        maxScoreSpan.innerHTML = maxScore
+        maxScoreSpan.innerHTML = maxScore;
 
+        // 隱藏投籃按鈕
+        shotBtn.setAttribute('class', 'btn btn-success class-btn me-5 hide-btn');
 
-        // action
+        // 遊戲重置函數
         function resetGame() {
             console.log('reset');
             clearInterval(timer);
             score = 0;
-            starTime = 10;
+            starTime = 60;
             scoreVal.innerHTML = score;
-            time.innerHTML = starTime;
-            time.setAttribute('class', 'text-success');
-            startBtn.setAttribute('class', 'btn btn-primary class-btn me-5 show-btn ');
+            timeSpan.innerHTML = starTime;
+            timeSpan.setAttribute('class', 'text-success');
+            startBtn.setAttribute('class', 'btn btn-primary class-btn me-5 show-btn');
             shotBtn.setAttribute('class', 'btn btn-success class-btn me-5 hide-btn');
         }
 
         startBtn.addEventListener('click', function () {
             console.log('startBtn click ok');
-            this.setAttribute('class', 'btn btn-primary class-btn me-5 hide-btn ');
+            this.setAttribute('class', 'btn btn-primary class-btn me-5 hide-btn');
             shotBtn.setAttribute('class', 'btn btn-success class-btn me-5 show-btn');
-            time.innerHTML = starTime;
-            timer = setInterval(function () {
+            timeSpan.innerHTML = starTime;
 
+            timer = setInterval(function () {
                 starTime--;
-                time.innerHTML = starTime;
+                console.log('startTime', starTime);
+                timeSpan.innerHTML = starTime;
+
                 if (starTime <= 0) {
-                    // 運用localStorage把大於歷史分數的score放入maxScore
                     if (maxScore < score) {
                         maxScore = score;
                         localStorage.setItem('maxScore', maxScore);
-                        maxScoreSpan.innerHTML = maxScore
+                        maxScoreSpan.innerHTML = maxScore;
                     }
                     setTimeout(function () {
                         clearInterval(timer);
-                        time.innerHTML = 0;
+                        timeSpan.innerHTML = 0;
                         alert("時間到!" + '您的分數是:' + score);
                         resetGame();
-                    }, 0)
+                    }, 0);
                 }
 
-                if (starTime <= 30) {
-                    time.setAttribute('class', 'text-danger');
+                if (starTime <= 5) {
+                    timeSpan.setAttribute('class', 'text-danger');
+                } else {
+                    timeSpan.setAttribute('class', 'text-success');
                 }
             }, 1000);
-
         });
+
         shotBtn.addEventListener('click', function () {
             console.log('shotBtn click ok');
             if (starTime < 1) {
                 return false;
             }
+
             if (starTime > bonustime) {
                 score += 2;
             } else {
                 score += 3;
             }
             scoreVal.innerHTML = score;
+
+            // 創建新的飛行的籃球
+            const flyingBall = document.createElement('div');
+            flyingBall.classList.add('flying-ball');
+            const ballImg = document.createElement('img');
+            ballImg.src = "./image/baseketball.png";
+            ballImg.alt = "飛行的籃球";
+            flyingBall.appendChild(ballImg);
+            main.appendChild(flyingBall);
+
+            // 獲取位置信息
+            const basketballRect = document.getElementById('basketball').getBoundingClientRect();
+            const hoopRect = document.querySelector('.hoop').getBoundingClientRect();
+            const mainRect = main.getBoundingClientRect();
+
+            // 設置初始位置（#basketball 的中心）
+            const ballCenterX = basketballRect.left + basketballRect.width / 2 - mainRect.left;
+            const ballCenterY = basketballRect.top + basketballRect.height / 2 - mainRect.top;
+            flyingBall.style.left = `${ballCenterX - 45}px`; // 45px 是球的寬度一半
+            flyingBall.style.top = `${ballCenterY - 45}px`;
+
+            // 計算到 hoop 中心的偏移
+            const hoopCenterX = hoopRect.left + hoopRect.width / 2 - mainRect.left;
+            const hoopCenterY = hoopRect.top + hoopRect.height / 2 - mainRect.top;
+            const translateX = hoopCenterX - ballCenterX;
+            const translateY = hoopCenterY - ballCenterY;
+
+            console.log('ballCenterX, ballCenterY', ballCenterX, ballCenterY);
+            console.log('hoopCenterX, hoopCenterY', hoopCenterX, hoopCenterY);
+            console.log('translateX, translateY', translateX, translateY);
+
+            // 觸發移動
+            requestAnimationFrame(() => {
+                flyingBall.style.transform = `translate(${translateX}px, ${translateY}px)`;
+            });
+
+            // 動畫結束後移除
+            flyingBall.addEventListener('transitionend', function () {
+                flyingBall.remove();
+            }, { once: true });
         });
+
         stopBtn.addEventListener('click', function () {
             console.log('stopBtn click ok');
             clearInterval(timer);
+            starTime = parseInt(timeSpan.innerHTML);
+            startBtn.setAttribute('class', 'btn btn-primary class-btn me-5 show-btn');
+            shotBtn.setAttribute('class', 'btn btn-success class-btn me-5 hide-btn');
         });
 
         // Placeholder for future game logic
         $(document).ready(function () {
             // game logic here
-
         });
     </script>
 </body>
